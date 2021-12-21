@@ -2,8 +2,8 @@ from django.http.response import HttpResponseRedirect
 from django.shortcuts import render,redirect
 from django.http  import HttpResponse
 from django.contrib.auth.decorators import login_required
-
-from hoodapp.forms import ProfileForm
+from django.contrib.auth.models import User
+from hoodapp.forms import ProfileForm,UpdateProfileForm
 from .models import Profile
 
 
@@ -33,3 +33,17 @@ def create_profile(request):
     else:
         form = ProfileForm()
     return render(request, 'create_profile.html', {"form": form, "title": title})   
+def update_profile(request,id):
+    user = User.objects.get(id=id)
+    profile = Profile.objects.get(user_id = user)
+    form = UpdateProfileForm(instance=profile)
+    if request.method == "POST":
+            form = UpdateProfileForm(request.POST,request.FILES,instance=profile)
+            if form.is_valid():  
+                
+                profile = form.save(commit=False)
+                profile.save()
+                return redirect('profile') 
+            
+    ctx = {"form":form}
+    return render(request, 'update_profile.html', ctx)
