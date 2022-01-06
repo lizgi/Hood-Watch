@@ -1,6 +1,23 @@
-{%extends 'all-hood/base.html'%}
-
+{% extends 'all-hood/base.html' %}
+{% load static %}
 {% block content %}
-{{block.super}}
-<h3>Just try</h3>
+<style>
+    body { 
+        background-image:url("static/images/hood.jpeg");
+        background-repeat: no-repeat;
+        background-size: cover;
+        background-position: center;
+    }
+</style>
+
+<div class="container-fluid">
+    <div class="text-center" style="padding-top:50px;padding-bottom:170px;color: purple;">
+        <h1>Welcome to LA-HOOD<i class="fas fa-home"></i></h1>
+        <h3 class="">Home the haven for peace and tranquility</h3>
+        <a href="{% url 'hood' %}"  class="btn btn-info btn-outline-danger  mt-4">View neighbourhoods</a>
+    </div>
+
+</div>
+
+
 {% endblock %}
