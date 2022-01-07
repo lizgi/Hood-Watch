@@ -1,0 +1,27 @@
+{% extends 'all-hood/base.html' %}
+{% load bootstrap4 %}
+
+{% block content %}
+<div class="container">
+    <div class="row">
+        <div class="col-md-2"></div>
+        <div class="col-md-8  poster">
+            <h3 style="color: purple;" class="text-center tt ">Create a new post</h3>
+            <form action="{%url 'create_post'%}" method="post" enctype="multipart/form-data">
+                {%csrf_token%}    
+                {% bootstrap_form form%}
+                <input type="submit" class="btn btn-dark " value="Create post">
+            </form>
+        </div>
+        <div class="col-md-2"></div>
+    </div>
+
+</div>
+<style>
+        body{
+            background-color: lavender;
+            background-repeat:no-repeat;
+            background-size: cover;
+        }
+    </style>
+{% endblock %}
