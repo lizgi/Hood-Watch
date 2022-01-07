@@ -19,16 +19,14 @@ class HoodForm(forms.ModelForm):
         model=Neighborhood
         fields = ['hood_image','name','description','occupants_count','location']
 
-class BusinessForm(forms.ModelForm):
-    class Meta:
-        model = Business
-        exclude = ('user', 'neighborhood')
-
 
 class PostForm(forms.ModelForm):
     class Meta:
         model = Post
-        exclude = ('user', 'hood')
+        fields=['title','image','content','location','neighborhood']
 
-    
+class BusinessForm(forms.ModelForm):
+    class Meta:
+        model=Business
+        fields=['business_name','email','description','location','neighborhood']                
 
