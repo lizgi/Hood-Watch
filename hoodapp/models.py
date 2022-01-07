@@ -2,6 +2,8 @@ from django.db import models
 from django.contrib.auth.models import User
 import datetime as dt
 from cloudinary.models import CloudinaryField
+from django.dispatch import receiver
+from django.db.models.signals import post_save
 
 # Create your models here.
 
@@ -16,24 +18,6 @@ class Location(models.Model):
     def __str__(self):
         return self.name
 
-class Post(models.Model):
-    title = models.CharField(max_length=120, null=True)
-    date = models.DateTimeField(auto_now_add=True)
-    user = models.ForeignKey('Profile', on_delete=models.CASCADE, related_name='post_owner')
-    hood = models.ForeignKey('Neighborhood', on_delete=models.CASCADE, related_name='hood_post')
-
-
-    def __str__(self):
-        return f'{self.title} Post'
-
-    def save_post(self):
-        self.save()
-
-    def delete_post(self):
-        self.delete()
-    
-
-
 
 class Neighborhood(models.Model):
     name = models.CharField(max_length=50)
@@ -44,6 +28,8 @@ class Neighborhood(models.Model):
     admin = models.ForeignKey(User, on_delete=models.CASCADE,null=True)
     created_on = models.DateTimeField(auto_now_add=True,null=True)
     updated_on = models.DateTimeField(auto_now=True,null=True)
+    healthcenter_number = models.IntegerField(null=True, blank=True)
+    police_hotline = models.IntegerField(null=True, blank=True)
 
     def create_neigborhood(self):
         self.save()
@@ -67,48 +53,86 @@ class Neighborhood(models.Model):
         return hood
 
     def __str__(self):
-        return self.name        
+        return self.name 
 
+class Post(models.Model):
+    title = models.CharField(max_length=120, null=True)
+    image= CloudinaryField('image',null=True,blank=True)
+    content = models.TextField(null=True)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    location = models.ForeignKey(Location, on_delete=models.CASCADE,null=True)
+    neighborhood = models.ForeignKey(Neighborhood, on_delete=models.CASCADE, related_name='hood_post',null=True)
+    created_at = models.DateTimeField(auto_now_add=True,null=True)
 
-class Business(models.Model):
-    name = models.CharField(max_length=120)
-    email = models.EmailField(max_length=254)
-    description = models.TextField(null=True)
-    neighbourhood = models.ForeignKey('Neighborhood', on_delete=models.CASCADE, related_name='business')
-    user = models.ForeignKey('Profile', on_delete=models.CASCADE, related_name='owner')
-
-    def __str__(self):
-        return f'{self.name} Business'
-
-    def save_business(self):
+    def create_post(self):
         self.save()
 
-    def delete_business(self):
+    def delete_post(self):
         self.delete()
+
+    def update_post(self):
+        self.update()
+
+    def _str_(self):
+        return self.title
+
 
 class Profile(models.Model):
   profile_pic = CloudinaryField("image")
   bio = models.TextField()
   contact=models.CharField(max_length=100)
-  user = models.OneToOneField(User,on_delete = models.CASCADE,null=True)
+  user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='profile',null=True)
   location = models.ForeignKey(Location, on_delete=models.CASCADE,null=True)
   neighborhood = models.ForeignKey(Neighborhood, on_delete=models.CASCADE,null=True)
 
-def save_profile(self):
-    self.save()
+  def str(self):
+        return f'{self.user.username} profile'
 
-def delete_profile(self):
-     self.save()
+     
+  @receiver(post_save, sender=User)
+     
+  def create_user_profile(sender, instance, created, **kwargs):
+     
+      if created:
+     
+          Profile.objects.create(user=instance)
+  
+     
+  @receiver(post_save, sender=User)
+     
+  def save_user_profile(sender, instance, **kwargs):
+     
+      instance.profile.save()
 
-def update_profile(self):
-     self.save() 
+class Business(models.Model):
+    business_name = models.CharField(max_length=50,null=True)
+    email = models.EmailField(max_length=50)
+    description = models.TextField(blank=True, null=True)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    location = models.ForeignKey(Location, on_delete=models.CASCADE,null=True)
+    neighborhood = models.ForeignKey(Neighborhood, on_delete=models.CASCADE,null=True)
+    created_on = models.DateTimeField(auto_now_add=True,null=True)
+    updated_on = models.DateTimeField(auto_now=True)
 
-@classmethod
-def filter_by_id(cls, id):
-        profile = Profile.objects.filter(user=id).first()
-        return profile
+    def create_business(self):
+        self.save()
 
-def _str_(self):
-        return self.user.username
+    def delete_business(self):
+        self.delete()
 
+    def update_business(self):
+        self.update()
+
+    @classmethod
+    def search_by_name(cls, search_term):
+        business = cls.objects.filter(name__icontains=search_term)
+        return business
+
+    @classmethod
+    def find_business(cls, id):
+        business = cls.objects.get(id=id)
+        return business
+
+    def _str_(self):
+        return self.business_name  
 
