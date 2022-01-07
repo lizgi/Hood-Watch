@@ -174,6 +174,18 @@ def posts(request):
     else:
         neighborhood = profile.neighborhood
         posts = Post.objects.filter(user_id=current_user.id)
-        return render(request, "posts.html", {"posts": posts})         
+        return render(request, "posts.html", {"posts": posts}) 
+
+@login_required(login_url="/accounts/login/")
+def search(request):
+    if 'search_term' in request.GET and request.GET["search_term"]:
+        search_term = request.GET.get("search_term")
+        searched_hood = Neighborhood.objects.filter(name__icontains=search_term)
+        message = f"Search For: {search_term}"
+
+        return render(request, "search.html", {"message": message, "hood": searched_hood})
+    else:
+        message = "You haven't searched for any term"
+        return render(request, "search.html", {"message": message})                
 
     
