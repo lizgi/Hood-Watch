@@ -4,7 +4,7 @@ from django.http  import HttpResponse
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from hoodapp.forms import BusinessForm, HoodForm, PostForm, ProfileForm,UpdateProfileForm
-from .models import Profile,Neighborhood,Post,Business
+from .models import Profile,Neighborhood,Post,Business,Location
 
 
 # Create your views here.
@@ -13,21 +13,6 @@ from .models import Profile,Neighborhood,Post,Business
 def index(request):
     return render(request, 'all-hood/index.html')
 
-@login_required(login_url='/accounts/login/')
-def create_profile(request):
-    current_user = request.user
-    title = "Create Profile"
-    if request.method == 'POST':
-        form = ProfileForm(request.POST, request.FILES)
-        if form.is_valid():
-            profile = form.save(commit=False)
-            profile.user = current_user
-            profile.save()
-        return HttpResponseRedirect('/')
-
-    else:
-        form = ProfileForm()
-    return render(request, 'create_profile.html', {"form": form, "title": title})
 
 @login_required(login_url="/accounts/login/")
 def profile(request):
@@ -86,18 +71,18 @@ def neighborhoods(request):
     return render(request, 'neighborhood.html',{'all_neighborhoods': all_neighborhoods})
 
 
-def join_neighborhood(request, id):
+def join_hood(request,id):
     neighborhood = get_object_or_404(Neighborhood, id=id)
+    
     request.user.profile.neighborhood = neighborhood
     request.user.profile.save()
     return redirect('hood')
 
-
-def leave_neighborhood(request, id):
+def leave_hood(request, id):
     hood = get_object_or_404(Neighborhood, id=id)
     request.user.profile.neighborhood = None
     request.user.profile.save()
-    return redirect('hood')    
+    return redirect('hood')
 
 
 def create_post(request, hood_id):
@@ -112,6 +97,83 @@ def create_post(request, hood_id):
             return redirect('lone_hood', hood.id)
     else:
         form = PostForm()
-    return render(request, 'post.html', {'form': form})    
+    return render(request, 'post.html', {'form': form})  
+
+@login_required(login_url="/accounts/login/")
+def create_business(request):
+    current_user = request.user
+    if request.method == "POST":
+        
+        form=BusinessForm(request.POST,request.FILES)
+
+        if form.is_valid():
+            business=form.save(commit=False)
+            business.user=current_user
+            business.hood= hood
+            business.save()
+        return HttpResponseRedirect('/businesses')
+    else:
+        form=BusinessForm()
+    return render (request,'business_form.html', {'form': form, 'profile': profile})
+
+
+
+
+@login_required(login_url="/accounts/login/")
+def businesses(request):
+    current_user = request.user
+    businesses = Business.objects.all().order_by('-id')
+    
+    profile = Profile.objects.filter(user_id=current_user.id).first()
+
+    if profile is None:
+        profile = Profile.objects.filter(
+            user_id=current_user.id).first()
+        
+        locations = Location.objects.all()
+        neighborhood = Neighborhood.objects.all()
+        
+        businesses = Business.objects.all().order_by('-id')
+        
+        return render(request, "profile.html", {"danger": "Update Profile", "locations": locations, "neighborhood": neighborhood, "businesses": businesses})
+    else:
+        neighborhood = profile.neighborhood
+        businesses = Business.objects.all().order_by('-id')
+        return render(request, "business.html", {"businesses": businesses})  
+
+login_required(login_url="/accounts/login/")
+def create_post(request):
+    current_user = request.user
+    if request.method == 'POST':
+        form = PostForm(request.POST)
+        if form.is_valid():
+            post = form.save(commit=False)
+            post.hood = hood
+            post.user=current_user
+            post.save()
+            return redirect('/posts')
+    else:
+        form = PostForm()
+    return render(request, 'create_post.html', {'form': form})
+
+def posts(request):
+    current_user = request.user
+    profile = Profile.objects.filter(user_id=current_user.id).first()
+    posts = Post.objects.filter(user_id=current_user.id)
+    if profile is None:
+        profile = Profile.objects.filter(
+            user_id=current_user.id).first() 
+        posts = Post.objects.filter(user_id=current_user.id)
+        
+        locations = Location.objects.all()
+        neighborhood = Neighborhood.objects.all()
+        
+        businesses = Business.objects.filter(user_id=current_user.id)
+        
+        return render(request, "profile.html", {"danger": "Update Profile ", "locations": locations, "neighborhood": neighborhood,  "businesses": businesses,"posts": posts})
+    else:
+        neighborhood = profile.neighborhood
+        posts = Post.objects.filter(user_id=current_user.id)
+        return render(request, "posts.html", {"posts": posts})         
 
     
