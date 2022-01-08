@@ -12,18 +12,28 @@
     <div class="container-fluid">
       <img src="" width="50" alt="">
       <div class="col-sm-2 col-md-2 navbar-header">
-        
         <button class="btn btn-default"><a class="navbar-brand" href=""> <i>LA-HOOD </i> </a></button>
       </div>
+      <div>
+        <a class="btn btn-default" href="/hood/" style="font-weight: 700;">Hoods</a>
+      </div>
+      <div class="forms">
+        <form class="me-auto search-form " target="_self" action="{% url 'search' %}">
+            <div class="input-group ">
 
-      <div class="col-sm-3 col-md-3 navbar-right">
-        
-        
+                <input type="text" class="form-control" placeholder="Search by hood name"
+                    name="search_term">
+                <div class="input-group-btn">
+                    <button class="btn btn-default" type="submit"><i class="fa fa-search" aria-hidden="true"
+                            style="color: white;"></i></button>
+                </div>
+            </div>
+        </form>
       </div>
 
-      <li>
+      <div>
         <a class="btn btn-default" href="/profile/" style="font-weight: 700;">{{ user.username }}</a>
-    </li>
+      </div>
 
 
       {% if user.is_authenticated %}
