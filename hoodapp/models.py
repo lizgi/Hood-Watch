@@ -73,7 +73,7 @@ class Post(models.Model):
     def update_post(self):
         self.update()
 
-    def _str_(self):
+    def __str__(self):
         return self.title
 
 
@@ -85,7 +85,7 @@ class Profile(models.Model):
   location = models.ForeignKey(Location, on_delete=models.CASCADE,null=True)
   neighborhood = models.ForeignKey(Neighborhood, on_delete=models.CASCADE,null=True)
 
-  def str(self):
+  def __str__(self):
         return f'{self.user.username} profile'
 
      
@@ -133,6 +133,6 @@ class Business(models.Model):
         business = cls.objects.get(id=id)
         return business
 
-    def _str_(self):
+    def __str__(self):
         return self.business_name  
 
