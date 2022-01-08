@@ -19,8 +19,9 @@ def profile(request):
     current_user = request.user
     profile = Profile.objects.filter(user_id=current_user.id).first()
     neighborhood = Neighborhood.objects.all()
-    businesses = Business.objects.filter(user_id=current_user.id)
-    return render(request, "profile.html", {"profile": profile, ' neighborhood':  neighborhood, 'business': businesses})
+    businesses = Business.objects.all().order_by('-id')
+    posts = Post.objects.all().order_by('-id')
+    return render(request, "profile.html", {"profile": profile, ' neighborhood':  neighborhood, 'businesses': businesses, 'posts' : posts})
 
 
 @login_required(login_url='/accounts/login/')
@@ -61,9 +62,12 @@ def hood(request):
 
 @login_required(login_url='/accounts/login/')
 def lone_hood(request,name):
+    current_user = request.user
+    businesses = Business.objects.all().order_by('-id')
+    posts = Post.objects.filter(user_id=current_user.id)
     hood = Neighborhood.objects.get(name=name)
     
-    return render(request,'lone_hood.html',{'hood':hood})    
+    return render(request,'lone_hood.html',{'hood':hood,"businesses": businesses ,"posts": posts})    
 
 def neighborhoods(request):
     all_neighborhoods = Neighborhood.objects.all()
@@ -115,8 +119,6 @@ def create_business(request):
     else:
         form=BusinessForm()
     return render (request,'business_form.html', {'form': form, 'profile': profile})
-
-
 
 
 @login_required(login_url="/accounts/login/")
