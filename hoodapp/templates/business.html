@@ -13,15 +13,15 @@
             </h2>
             <div class="row">
             
-            {% for biz in businesses %}
+            {% for biss in businesses %}
             <div class="col-md-4">
                 <div class="card" >
                     <div class="card-body">
-                        <h5 class="card-title text-capitalize">{{ biz.business_name }}</h5>
-                        <p>{{ biz.description }}</p>
-                        <p>{{ biz.neighborhood }}</p>
-                        <p>{{ biz.location }}</p>
-                        <a href="malto:{{ biz.email }}" class="card-link">Email: <span class="text-bold text-primary">{{ biz.email }}</span> </a>
+                        <h5 class="card-title text-capitalize">{{ biss.business_name }}</h5>
+                        <p>{{ biss.description }}</p>
+                        <p>{{ biss.neighborhood }}</p>
+                        <p>{{ biss.location }}</p>
+                        <a href="malto:{{ biss.email }}" class="card-link">Email: <span class="text-bold text-primary">{{ biss.email }}</span> </a>
                        <br>
                     </div>
                   </div>
