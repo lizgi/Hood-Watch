@@ -9,7 +9,6 @@ from .models import Profile,Neighborhood,Post,Business,Location
 
 # Create your views here.
 
-@login_required(login_url='/accounts/login/')
 def index(request):
     return render(request, 'all-hood/index.html')
 
