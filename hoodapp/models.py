@@ -56,13 +56,18 @@ class Neighborhood(models.Model):
         return self.name 
 
 class Post(models.Model):
-    title = models.CharField(max_length=120, null=True)
-    image= CloudinaryField('image',null=True,blank=True)
+    title = models.CharField(max_length=120, null=True)    
     content = models.TextField(null=True)
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE,null=True)
     location = models.ForeignKey(Location, on_delete=models.CASCADE,null=True)
     neighborhood = models.ForeignKey(Neighborhood, on_delete=models.CASCADE, related_name='hood_post',null=True)
     created_at = models.DateTimeField(auto_now_add=True,null=True)
+
+    class Meta:
+        ordering = ['-pk']
+        
+    def __str__(self):
+        return f'{self.title} Post'
 
     def create_post(self):
         self.save()
@@ -73,9 +78,7 @@ class Post(models.Model):
     def update_post(self):
         self.update()
 
-    def __str__(self):
-        return self.title
-
+   
 
 class Profile(models.Model):
   profile_pic = CloudinaryField("image")
@@ -105,14 +108,21 @@ class Profile(models.Model):
       instance.profile.save()
 
 class Business(models.Model):
-    business_name = models.CharField(max_length=50,null=True)
-    email = models.EmailField(max_length=50)
+    name = models.CharField(max_length=50,null=True)
+    image= CloudinaryField('image',null=True,blank=True)
+    email = models.EmailField(max_length=50,null=True)
     description = models.TextField(blank=True, null=True)
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE,null=True)
     location = models.ForeignKey(Location, on_delete=models.CASCADE,null=True)
     neighborhood = models.ForeignKey(Neighborhood, on_delete=models.CASCADE,null=True)
     created_on = models.DateTimeField(auto_now_add=True,null=True)
     updated_on = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        ordering = ['-pk']
+
+    def __str__(self):
+        return f'{self.name} Business'
 
     def create_business(self):
         self.save()
@@ -133,6 +143,4 @@ class Business(models.Model):
         business = cls.objects.get(id=id)
         return business
 
-    def __str__(self):
-        return self.business_name  
-
+    
