@@ -23,10 +23,10 @@ class HoodForm(forms.ModelForm):
 class PostForm(forms.ModelForm):
     class Meta:
         model = Post
-        fields=['title','image','content','location','neighborhood']
+        fields=['title','content','location','neighborhood']
 
 class BusinessForm(forms.ModelForm):
     class Meta:
         model=Business
-        fields=['business_name','email','description','location','neighborhood']                
+        fields=['name','image','email','description','location','neighborhood']                
 
