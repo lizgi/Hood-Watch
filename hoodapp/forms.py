@@ -17,7 +17,7 @@ class UpdateProfileForm(forms.ModelForm):
 class HoodForm(forms.ModelForm):
     class Meta:
         model=Neighborhood
-        fields = ['hood_image','name','description','occupants_count','location']
+        fields = ['hood_image','name','description','occupants_count','location','healthcenter_number','police_hotline']
 
 
 class PostForm(forms.ModelForm):
