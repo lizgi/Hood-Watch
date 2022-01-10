@@ -4,7 +4,7 @@
 <!-- content -->
 <div class="container mt-4">
   <div class="form">
-    <h4 class="text-center text-white">Update profile</h4>
+    <h4 class="text-center text-black">Update profile</h4>
     <form action="" method="POST" enctype="multipart/form-data">
       {% csrf_token %} {% bootstrap_form form %}
       <div class="form-group">
@@ -13,10 +13,6 @@
     </form>
   </div>
 </div>
-<style>
-  body{
-    background-color: darkcyan;
-  }
-</style>
+
 
 {% endblock%}

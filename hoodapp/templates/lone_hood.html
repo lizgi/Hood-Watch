@@ -1,48 +1,56 @@
 {% extends "all-hood/base.html" %}
 {% block content %}
 <style>
-    .image{
+    .image {
         height: auto;
         width: 100%;
     }
-    .hood{
+
+    .hood {
         margin-top: 5%;
+    }
+
+    .biz {
+        width: 100%;
+        height: auto;
     }
 </style>
 <div class="container hood">
-      <div class="hoods">
-          <div class="row">
+    <h2 class="text-center"><i><b>{{hood.name}}</i></b></h2>
+    <h3 class="text-bold">Police_hotline: {{ hood.police_hotline }} <br> Health_center: {{ hood.healthcenter_number}}</h3>
+    <div class="hoods">
+        <div class="row">
             <div class="col-md-6">
-                <img src="{{hood.hood_image.url}}"class="image">
+                <img src="{{hood.hood_image.url}}" class="image">
             </div>
             <div class="col-md-6">
-                <p>Hood_Name: {{hood.name}}</p>
                 <p>Description: {{hood.description}}</p>
-                <p>Members_Count: {{hood.occupants_count}}</p>
+                <p>{{hood.members.count}} Member{{hood.members.count|pluralize}}</p>
                 <p>Location: {{ hood.location }}</p>
-                <p>Date Created: {{ hood.created_on|date }}</p>
-                <p>Date Updated: {{ hood.updated_on|date}}</p>
-                <p>Police_hotline: {{ hood.police_hotline }}</p>
-                <p>Health_center: {{ hood.healthcenter_number}}</p>
+                <p>Date : {{ hood.created_on|date }}</p>
+
             </div>
-            
-          </div>
+
+        </div>
     </div>
     <div>
-        <div class="col-md-6">
+
         <a class="btn btn-default" href="/businesses/" style="font-weight: 700;"> Show Businesses </a>
-        {% for biss in businesses %}
-            <div class="col-md-4">
-                <div class="card" >
+        <div class="row">
+            {% for biss in businesses %}
+            <div class="col-md-6 card">
+                <div class="">
                     <div class="card-body">
                         <h5 class="card-title text-capitalize">{{ biss.business_name }}</h5>
+                        <img src="{{ biss.image.url }}" alt="biz_pic" class="biz">
                         <p>{{ biss.description }}</p>
                         <p>{{ biss.neighborhood }}</p>
                         <p>{{ biss.location }}</p>
-                        <a href="malto:{{ biss.email }}" class="card-link">Email: <span class="text-bold text-primary">{{ biss.email }}</span> </a>
-                       <br>
+                        <a href="malto:{{ biss.email }}" class="card-link">Email: <span
+                                class="text-bold text-primary">{{ biss.email }}</span> </a>
+                        <br>
                     </div>
-                  </div>
+                </div>
             </div>
 
             {% empty %}
@@ -52,25 +60,31 @@
                         <h6 class="fade-item mb-2 text-danger">No businesses found within your Neighborhood!!</h6>
                     </div>
                 </div>
-            {% endfor %}
-    </div>
+                {% endfor %}
+            </div>
         </div>
-    <div>
-        <a class="btn btn-default" href="/posts/" style="font-weight: 700;"> Uploaded Posts </a>
-        {% for post in posts %}
-      <div class="col-md-4">
+    </div>
 
-        <div class="card">
-          <img src="{{ post.image.url }}" alt="post" style="width:100%,">
-          <h4>{{post.title}}</h4>
-          <p class="title">{{post.category}}</p>
-          <p>{{post.neighborhood}}</p>
-          <p>Posted on :<strong>{{ post.created_at|date }}</strong> by <strong>{{post.user}}</strong></p>
-          
+    <div class="container">
+        <a class="" href="/posts/" style="font-weight: 700;"> Uploaded Posts </a>
+        <div class="row">
+            {% for post in posts %}
+            <div class=" card col-md-4">
+
+                <div class="">
+
+                    <h4>{{post.title}}</h4>
+                    <p>{{post.neighborhood}}</p>
+                    <p>Posted on :<strong>{{ post.created_at|date }}</strong> by <strong>{{post.user}}</strong></p>
+
+                </div>
+            </div>
+            {%endfor%}
         </div>
-      </div>
-      {%endfor%}
+
     </div>
+
+    
 </div>
 
 

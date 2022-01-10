@@ -26,7 +26,7 @@
                 {{hoods.name}}
             </a>
             {% elif not request.user.profile.neighborhood %}
-            <a href="{% url 'join_hood' hoods.id %}" class="btn btn-info btn-sm">Join Hood</a>
+            <a href="{% url 'join_hood' hoods.id %}" class="btn btn-info btn-sm mb-4">Join Hood</a>
             {% endif %}
         </div>
         {% endfor %}
@@ -34,10 +34,13 @@
 
 
 </div>
-<style>
-    body{
-        background-color: darkcyan;
-    }
-</style>
+
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
 
 {%endblock%}

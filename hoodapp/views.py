@@ -63,9 +63,10 @@ def hood(request):
 @login_required(login_url='/accounts/login/')
 def lone_hood(request,name):
     current_user = request.user
-    businesses = Business.objects.all().order_by('-id')
-    posts = Post.objects.filter(user_id=current_user.id)
     hood = Neighborhood.objects.get(name=name)
+    businesses = Business.objects.filter(neighborhood=hood)
+    posts = Post.objects.filter(neighborhood=hood)
+    
     
     return render(request,'lone_hood.html',{'hood':hood,"businesses": businesses ,"posts": posts})    
 

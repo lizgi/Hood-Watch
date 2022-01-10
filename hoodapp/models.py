@@ -86,7 +86,7 @@ class Profile(models.Model):
   contact=models.CharField(max_length=100)
   user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='profile',null=True)
   location = models.ForeignKey(Location, on_delete=models.CASCADE,null=True)
-  neighborhood = models.ForeignKey(Neighborhood, on_delete=models.CASCADE,null=True)
+  neighborhood = models.ForeignKey(Neighborhood, on_delete=models.SET_NULL, null=True, related_name='members', blank=True)
 
   def __str__(self):
         return f'{self.user.username} profile'

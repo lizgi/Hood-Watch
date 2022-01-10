@@ -7,14 +7,15 @@
 
         {% for hoods in hood %}
         <div class="col-md-6">
-            <img src="{{hoods.hood_image.url}}" alt="" class="image">
-
-
-            <a href="{%url 'lone_hood' hoods.name %}">
-                <p class="name">{{hoods.name}}  </p>
+            
+            <a href="{%url 'lone_hood' hoods.name %}" class="btn btn-sm"
+            ><img src="{{hoods.hood_image.url}}" alt="" class="image">
             </a>
-            <p> {{ hoods.location }}      {{ hoods.occupants_count }}</p>
-            <p>{{ hoods.content }}</p>
+
+            <p class="name">{{hoods.name}}  </p>
+            <p> {{ hoods.location }}</p>
+            <p>{{hoods.members.count}} Member{{hoods.members.count|pluralize}}</p>
+            <p>{{ hoods.description }}</p>
 
             {% if request.user.profile.neighborhood == hoods %}
             <a href="{% url 'leave_hood' hoods.id %}" class="btn btn-outline-danger btn-sm">Leave at will</a>
@@ -24,14 +25,15 @@
                 {{hoods.name}}
             </a>
             {% elif not request.user.profile.neighborhood %}
-            <a href="{% url 'join_hood' hoods.id %}" class="btn btn-info btn-sm">Join Hood</a>
+            <a href="{% url 'join_hood' hoods.id %}" class="btn btn-info btn-sm mt-2">Join Hood</a>
             {% endif %}
         </div>
         {% endfor %}
     </div>
 
 
-</div>
+</div><br>
+<br>
 
 <style>
     .image {
@@ -40,7 +42,8 @@
     }
 
     .hub {
-        margin-top: 3%;
+        margin-top: 2%;
+        
     }
 </style>
 
