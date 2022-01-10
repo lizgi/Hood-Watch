@@ -15,6 +15,7 @@ import cloudinary
 # from cloudinary.models import CloudinaryField
 import cloudinary.uploader
 import cloudinary.api
+import django_heroku
 from pathlib import Path
 from decouple import config,Csv
 
@@ -35,7 +36,7 @@ SECRET_KEY = 'django-insecure-pn&t%idy7fswyc=i(_)$2!6y0@y$7@frjzo0o!u+6he5@ad((_
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -61,6 +62,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',
 ]
 
 ROOT_URLCONF = 'hoodproj.urls'
@@ -147,8 +149,5 @@ cloudinary.config(
     api_secret=config('CL_SECRET'),
     
 )
-
-# Default primary key field type
-# https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
-
-DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+'django.db.models.BigAutoField'
+django_heroku.settings(locals())
