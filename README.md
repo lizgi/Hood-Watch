@@ -80,7 +80,7 @@ Open the application on your browser `127.0.0.1:8000`.
 ## License
 MIT License
 
-Copyright (c) 2021 lizgi
+Copyright (c) 2022 lizgi
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
